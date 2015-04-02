@@ -62,6 +62,11 @@ function wkhtmltopdf(input, options, callback) {
   // setup error handling
   var stream = child.stdout;
   function handleError(err) {
+    // ignore QFont errors
+    // todo: really need a better way to handle warnings!
+    if (err.message && err.message.indexOf('QFont') != -1) {
+      return true;
+    }
     child.removeAllListeners('exit');
     child.kill();
     
