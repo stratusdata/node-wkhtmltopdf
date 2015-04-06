@@ -9,7 +9,7 @@ function quote(val) {
   return val;
 }
 
-function wkhtmltopdf(input, options, callback) {
+function wkhtmltox(format, input, options, callback) {
   if (!options) {
     options = {};
   } else if (typeof options == 'function') {
@@ -30,8 +30,10 @@ function wkhtmltopdf(input, options, callback) {
     
     return true;
   }).concat(extraKeys);
+
+  var command = format == "pdf" ? "wkhtmltopdf" : "wkhtmltoimage";
   
-  var args = [wkhtmltopdf.command, '--quiet'];
+  var args = [command, '--quiet'];
   keys.forEach(function(key) {
     var val = options[key];
     if (key !== 'toc' && key !== 'cover' && key !== 'page')
@@ -92,5 +94,4 @@ function wkhtmltopdf(input, options, callback) {
   return stream;
 }
 
-wkhtmltopdf.command = 'wkhtmltopdf';
-module.exports = wkhtmltopdf;
+module.exports = wkhtmltox;
