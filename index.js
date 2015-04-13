@@ -58,15 +58,16 @@ function wkhtmltox(format, input, options, callback) {
   }
   
   // call the callback with null error when the process exits successfully
-  if (callback)
+  if (callback) {
     child.on('exit', function() { callback(null); });
-    
+  }
+
   // setup error handling
   var stream = child.stdout;
   function handleError(err) {
-    // ignore QFont errors
+    // ignore known errors
     // todo: really need a better way to handle warnings!
-    if (err.message && err.message.indexOf('QFont') != -1) {
+    if (err.message && (err.message.indexOf('QFont') != -1 || err.message.indexOf('network') != -1)) {
       return true;
     }
     child.removeAllListeners('exit');
